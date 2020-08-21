@@ -5,9 +5,7 @@ This framework aims to create a simple and easy to use basis for multiplayer gam
 To accomplish this the project makes use of following concepts:
 
   1. __Client/Server model__: Users interact with a Displayclient witch connects the game(engine/server).
-  
     1.1. The __DisplayClient__: Collects user input and displays grafics and plays sounds.
-    
     1.2. The __GameServer__ collects inputs from the clients, feeds the simultaion/game with them and sends rendering-data back. 
     
   2. The simulation uses a entity-component-system inspired approche.
