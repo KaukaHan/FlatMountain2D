@@ -1,4 +1,4 @@
-# FlatMountain2D
+## FlatMountain2D
 2D Multiplayer framework with focus on simplicity
 
 This framework aims to create a simple and easy to use basis for multiplayer games.
