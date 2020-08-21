@@ -12,6 +12,6 @@ To accomplish this the project makes use of following concepts:\
         - __Component__: stores data of entitys eg.: a health component may store hp and a armor component stores type and strength.\
         - __Entity__: Combines multible components to represent an "object" in the game like a knight, tree, cow, troll etc...\
         - __Config__: Stores configuration stored in files. Also contains global data.\
-    * Operations on the context(s) are performed by Systems and Services.\
+    2.2. Operations on the context(s) are performed by Systems and Services.\
         - __System__: Runs on certain conditions based on time or events. changes/creates/removes game data.\
         - __Service__: Used by systems, other services or the engine. Accesses gamedata and provides ways for events and communication.\
