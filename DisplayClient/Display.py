@@ -5,8 +5,6 @@ from pygame import *
 import pygame
 
 from threading import Thread, Lock
-import time
-
 
 class Display:
     def __init__(self):
@@ -55,6 +53,7 @@ class Display:
         pygame.quit()
 
 if __name__ == "__main__":
+    import time
     testwindow = Display()
     testwindow.draw_rectangle((10, 10), (100, 80), (75, 0, 100))
     time.sleep(5)
