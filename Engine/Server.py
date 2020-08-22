@@ -7,12 +7,12 @@ class Server:
     def __init__(self):
         self._alive = True
         self._host = "localhost"
-        self._port = "70000"
+        self._port = 60002
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.bind((self._host, self._port))
         self._socket.listen(1)
         self._client, self._clientadress = self._socket.accept()
-        self._thread = threading.Thread(self.run)
+        self._thread = threading.Thread(target=self.run)
         self._thread.start()
 
     def send(self, msg, delimiter=";"):
@@ -23,6 +23,9 @@ class Server:
             print("Error while sending: Connection broken")
             print("Closing Server")
             self.close()
+        except ConnectionResetError:
+            print("Error: connection resetted error")
+            self.close()
 
     def recive(self) -> str:
         result = ""
@@ -31,6 +34,9 @@ class Server:
         except BrokenPipeError:
             print("Error while reciving: Connection broken")
             print("Closing Server")
+            self.close()
+        except ConnectionResetError:
+            print("Error: connection resetted error")
             self.close()
         if len(result) > 0:
             result = result[:-1]            
@@ -45,9 +51,11 @@ class Server:
 
     def close(self):
         self._alive = False
+        self.send("close")
         self._thread.join()
         self._socket.close()
-        self._client.close()
+        self._client.shutdown(0)
+        self._client.close() 
 
 
 if __name__ == "__main__":

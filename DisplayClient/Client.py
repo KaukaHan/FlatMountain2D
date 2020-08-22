@@ -3,11 +3,12 @@
 from Display import Display
 
 import socket
+import select
 
 class Client:
     def __init__(self):
         self._alive = True
-        self._port = 7000
+        self._port = 60002
         self._host = "localhost"
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._host, self._port))
@@ -24,12 +25,18 @@ class Client:
 
     def recive(self) -> str:
         result = ""
-        try:
-            result += self._socket.recv(1024).decode("UTF-8")
-        except BrokenPipeError:
-            print("Error while reciving: Connection broken")
-            print("Closing client")
-            self.close()
+        if not self._alive:
+            return result
+        while len(result) == 0 or result[-1] != ";":
+            try:
+                result += self._socket.recv(1024).decode("UTF-8")
+            except BrokenPipeError:
+                print("Error while reciving: Connection broken")
+                print("Closing client")
+                self.close()
+            except ConnectionResetError:
+                print("Error: connection resetted error")
+                self.close()
         if len(result) > 0:
             result = result[:-1]            
         return result
@@ -44,9 +51,11 @@ class Client:
         if len(datalist) < 7:
             print("Error while parsing drawdata: {}".format(srawdata))
             return
-        pos = tuple(datalist[0:1])
-        size = tuple(datalist[2:3])
-        color = tuple(datalist[4:6])
+        for i in range(len(datalist)):
+            datalist[i] = int(datalist[i])
+        pos = tuple(datalist[0:2])
+        size = tuple(datalist[2:4])
+        color = tuple(datalist[4:7])
         self._display.draw_rectangle(pos, size, color)
 
     def run_loop(self):
@@ -57,9 +66,12 @@ class Client:
                 rawdata = self.recive()
                 self.send("ok")
                 self.draw_rawdata(rawdata)
+            elif command == "close":
+                self.close()
             else:
                 print("Unknown command from server: {}".format(command))
                 self.send("err")
+        self.close()
 
 
 if __name__ == "__main__":
