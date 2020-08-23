@@ -2,4 +2,10 @@
 
 class Component:
     def __init__(self):
-        pass
+        self._id = None
+
+    def get_id(self) -> int:
+        return self._id
+
+    def set_id(self, newid):
+        self._id = newid
