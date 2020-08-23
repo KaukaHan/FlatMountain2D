@@ -6,6 +6,9 @@ class Entity:
         self._tags = []
         self._componentids =[]
 
+    def get_id(self) -> int:
+        return self._id
+
     def add(self, parameter):
         if isinstance(parameter, str):
             self._tags.append(parameter)
