@@ -27,6 +27,17 @@ class Context:
                         return entityid
         return None
     
+    def add_to_entity(self, entityid, parameter):
+        """
+        parameter has to be a newly created Componentobject or a Stringobject
+        """
+        # add Componentobject to the context
+        if isinstance(parameter, Component):
+            self._components.append(parameter.set_id(len(self._components)))
+            parameter = parameter.get_id()
+        # parameter is now the id of the above added componentobject OR a stringobject
+        self._entitys[entityid].add(parameter)
+
     def get_component(self, entityid, componenttype):
         for component in self._components:
             if isinstance(component, componenttype) and self._entitys[entityid].has(component.get_id()):
@@ -41,4 +52,6 @@ class Context:
 
 
 if __name__ == "__main__":
-    pass
+    context = Context()
+    eid = context.new_entity()
+    context.add()
