@@ -8,7 +8,7 @@ import select
 class Client:
     def __init__(self):
         self._alive = True
-        self._port = 60002
+        self._port = 60003
         self._host = "localhost"
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._host, self._port))
@@ -66,6 +66,14 @@ class Client:
                 rawdata = self.recive()
                 self.send("ok")
                 self.draw_rawdata(rawdata)
+            elif command == "getkeys":
+                keys = self._display.get_keys()
+                keystring = ""
+                for key in keys:
+                    keystring += "{},".format(str(key))
+                if len(keystring) > 0:
+                    keystring = keystring[:-1]
+                self.send(keystring)
             elif command == "close":
                 self.close()
             else:
