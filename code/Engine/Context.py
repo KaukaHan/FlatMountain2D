@@ -14,6 +14,17 @@ class Context:
         newentity = Entity(newid)
         return newid
 
+    def get_entitys(self, filterproperty):
+        result = []
+        for entity in self._entitys:
+            if isinstance(filterproperty, Component):
+                if self.get_component(entity.get_id(), filterproperty) != None:
+                    result.append(entity.get_id())
+            elif isinstance(filterproperty, str):
+                if entity.has(filterproperty):
+                    result.append(entity.get_id())
+        return result
+
     def get_entity(self, searchproperty) -> int:
         if isinstance(searchproperty, str) or isinstance(searchproperty, int):
             for entity in self._entitys:
